@@ -1,0 +1,2 @@
+# Module com.cs.jqchart.demo.CSDemoWidgetSet
+# RPC service class, partial path of RPC policy file

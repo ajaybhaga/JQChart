@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>com.cs.jqchart</groupId>
+    <artifactId>jqchart-demo</artifactId>
+    <packaging>war</packaging>
+    <name>JQChart demo</name>
+    <description>JQChart Demo Application</description>
+    <version>1.0.0</version>
+
+    <repositories>
+        <repository>
+            <id>vaadin-addons</id>
+            <url>http://maven.vaadin.com/vaadin-addons</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+        <repository>
+            <id>java.net</id>
+            <url>http://download.java.net/maven/2</url>
+        </repository>
+        <repository>
+            <id>vaadin-snapshots</id>
+            <name>Vaadin snapshot repository</name>
+            <url>http://oss.sonatype.org/content/repositories/vaadin-snapshots</url>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+            <releases>
+                <enabled>false</enabled>
+            </releases>
+        </repository>
+        <repository>
+            <id>vaadin-releases</id>
+            <name>Vaadin releases</name>
+            <url>https://oss.sonatype.org/content/repositories/vaadin-releases/</url>
+        </repository>
+    </repositories>
+
+
+    <dependencies>
+        <dependency>
+            <groupId>com.cs.jqchart</groupId>
+            <artifactId>jqchart-addon</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.vaadin</groupId>
+            <artifactId>vaadin-server</artifactId>
+            <version>7.0.3</version>
+        </dependency>
+        <dependency>
+            <groupId>com.vaadin</groupId>
+            <artifactId>vaadin-themes</artifactId>
+            <version>7.0.3</version>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>2.5.1</version>
+                <configuration>
+                    <source>1.6</source>
+                    <target>1.6</target>
+                    <encoding>UTF-8</encoding>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>gwt-maven-plugin</artifactId>
+                <version>2.4.0</version>
+                <configuration>
+                    <webappDirectory>${project.build.directory}/${project.build.finalName}/VAADIN/widgetsets</webappDirectory>
+                    <extraJvmArgs>-Xmx1024M -Xss1024k</extraJvmArgs>
+                    <!--<logLevel>DEBUG</logLevel>-->
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>resources</goal>
+                            <goal>compile</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>com.vaadin</groupId>
+                <artifactId>vaadin-maven-plugin</artifactId>
+                <version>7.0.3</version>
+                <configuration>
+                    <webappDirectory>src/main/webapp/VAADIN/widgetsets</webappDirectory>
+                    <hostedWebapp>src/main/webapp/VAADIN/widgetsets</hostedWebapp>
+                    <!--<modules>
+                      <module>com.cs.CSWidgetSet</module>
+                    </modules>-->
+                    <force>true</force>
+                    <extraJvmArgs>-Xmx512M -Xss1024k</extraJvmArgs>
+                    <noServer>true</noServer>
+                    <runTarget>http://localhost:8080/demo</runTarget>
+                    <port>8080</port>
+                    <draftCompile>true</draftCompile>
+                    <!-- <style>OBF</style> -->
+                    <style>PRETTY</style>
+                    <force>true</force>
+                    <strict>true</strict>
+                    <compileReport>false</compileReport>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>resources</goal>
+                            <goal>compile</goal>
+                            <goal>test</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <artifactId>maven-clean-plugin</artifactId>
+                <version>2.5</version>
+                <configuration>
+                    <filesets>
+                        <fileset>
+                            <directory>src/main/webapp/VAADIN</directory>
+                            <includes>
+                                <include>widgetsets/*/**</include>
+                                <include>gwt-unitCache/**</include>
+                            </includes>
+                            <followSymlinks>false</followSymlinks>
+                        </fileset>
+                    </filesets>
+                </configuration>
+            </plugin>
+<!--            <plugin>
+                <groupId>org.apache.tomcat.maven</groupId>
+                <artifactId>tomcat7-maven-plugin</artifactId>
+                <version>2.1</version>
+            </plugin>-->
+        </plugins>
+
+        <finalName>JQChartDemo</finalName>
+    </build>
+
+</project>

@@ -1,0 +1,7 @@
+Manifest-Version: 1.0
+Implementation-Title: jqChart
+Implementation-Version: ${Implementation-Version}
+Vaadin-Package-Version: 1
+Vaadin-Widgetsets: com.cs.jqchart.widgetset.CSWidgetset
+Vaadin-Addon: ${Vaadin-Addon}
+Implementation-Vendor: ${Implementation-Vendor}
