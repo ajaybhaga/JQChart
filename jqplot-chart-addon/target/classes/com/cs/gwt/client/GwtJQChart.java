@@ -1,11 +1,13 @@
 package com.cs.gwt.client;
 
+import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.dom.client.DivElement;
 import com.google.gwt.dom.client.Document;
 import com.google.gwt.event.logical.shared.HasValueChangeHandlers;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
+import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.Widget;
 import com.vaadin.client.VConsole;
 
@@ -17,12 +19,14 @@ public class GwtJQChart extends Widget implements
      */
     public static final String CLASSNAME = "jqchart";
     private DivElement mainDivElement;
+    private DivElement chartDivElement;
     private DivElement renderToElement;
     private String uuid;
-    private String frameWidth;
-    private String frameHeight;
-    private String chartWidth;
-    private String chartHeight;
+    private boolean uuidSet = false;
+    private boolean chartDivIdSet = false;
+    private boolean initJSExecuted = false;
+    private boolean clickJSBound = false;
+    private boolean dataClickJSBound = false;
     public String initJS;
     public String refreshJS;
     public String clickJS;
@@ -33,115 +37,139 @@ public class GwtJQChart extends Widget implements
         // By default, render to the main div
         renderToElement = mainDivElement;
         setElement(mainDivElement);
-    }
+        VConsole.log("Main div created.");
 
-    public void setDimensions(String frameWidth, String frameHeight) {
         DivElement frameDivElement = Document.get().createDivElement();
-        frameDivElement.setAttribute("style", "width:" + frameWidth + "; height:" + frameHeight + "; overflow:auto;");
-        DivElement chartDivElement = Document.get().createDivElement();
-        chartDivElement.setAttribute("style", "width:" + chartWidth + "; height:" + chartHeight + ";");
+        frameDivElement.setAttribute("style", "width:100%; height:100%; overflow:auto;");
+        chartDivElement = Document.get().createDivElement();
+        chartDivElement.setAttribute("style", "width:100%; height:100%;");
         frameDivElement.appendChild(chartDivElement);
         mainDivElement.appendChild(frameDivElement);
 
-        // Render to the chart div
-        renderToElement = chartDivElement;
-        renderToElement.setId(uuid);
+        setWidth("100%");
+        setHeight("100%");
 
-        setWidth(frameWidth);
-        setHeight(frameHeight);
+        VConsole.log("Created chart div for plot.");
     }
 
-    public void setUUID(String uuid) {
-        this.uuid = uuid;
+    public void setChartDivId() {
+        // Only set the chart div id once
+        if (!chartDivIdSet) {
 
-        VConsole.log("setUUID(): GwtJQChart uuid = " + uuid);               
+            // Render to the chart div
+            renderToElement = chartDivElement;
+            renderToElement.setId(uuid);
 
-        // Initialize methods with unique id
-        initializeMethods(uuid);
-    }
-
-    public void setChartWidth(String chartWidth) {
-        this.chartWidth = chartWidth;
-    }
-
-    public void setChartHeight(String chartHeight) {
-        this.chartHeight = chartHeight;
-    }
-
-    public void setFrameWidth(String frameWidth) {
-        this.frameWidth = frameWidth;
-
-        // Update dimensions
-        setDimensions(frameWidth, frameHeight);
-    }
-
-    public void setFrameHeight(String frameHeight) {
-        this.frameHeight = frameHeight;
-
-        // Update dimensions
-        setDimensions(frameWidth, frameHeight);
-    }
-
-    public void setInitJS(String initJS) {
-        this.initJS = initJS;
-
-        if (initJS != null) {
-            runScript(initJS);
-        } else {
-            VConsole.log("initJS loaded: " + initJS);
+            VConsole.log("Set chart div for plot with id = " + uuid);
+            chartDivIdSet = true;
         }
     }
 
-    public void setRefreshJS(String refreshJS) {
+    public void setUUID(String uuid) {
+        if (!uuidSet) {
+            this.uuid = uuid;
+
+            // Initialize methods with unique id
+            initializeMethods(uuid);
+
+            VConsole.log("setUUID(): Initialized methods with uuid = " + uuid);
+
+            // UUID has been set
+            uuidSet = true;
+
+            // Set chart div id
+            setChartDivId();
+        }
+    }
+
+    public void setInitJS(final String initJS) {
+        // Execute the init JS if it has not been executed already
+        if (!initJSExecuted) {
+            VConsole.log("Attempting to execute initJS: " + initJS);
+            this.initJS = initJS;
+
+            if (initJS != null) {
+
+                // Run the script on the widget after setup completes.
+                Scheduler.get().scheduleDeferred(new Command() {
+                    public void execute() {
+                        runScript(initJS);
+                    }
+                });
+
+                VConsole.log("initJS loaded: " + initJS);
+            } else {
+                VConsole.log("initJS is null!");
+            }
+
+            // Init JS has been executed
+            initJSExecuted = true;
+        }
+    }
+
+    public void setRefreshJS(final String refreshJS) {
         this.refreshJS = refreshJS;
+
+        if (refreshJS != null) {
+
+            // Run the script on the widget after setup completes.
+            Scheduler.get().scheduleDeferred(new Command() {
+                public void execute() {
+                    runScript(refreshJS);
+                }
+            });
+
+            VConsole.log("refreshJS loaded: " + refreshJS);
+        } else {
+            VConsole.log("refreshJS is null!");
+        }
     }
 
     public void setClickJS(String clickJS) {
         this.clickJS = clickJS;
-        if (clickJS != null) {
+        if (!clickJSBound) {
+            if (clickJS != null) {
 
-            // Replace the token by the uidlId
-            clickJS = clickJS.replaceAll("#id#", uuid);
+                // Replace the token by the uidlId
+                clickJS = clickJS.replaceAll("#id#", uuid);
 
-            // Define click handler
-            String js =
-                    "$('#" + uuid + "').bind('jqplotClick', function(ev, gridpos, datapos, neighbor) {"
-                    + clickJS
-                    + "});";
-            runScript(js);
+                // Define click handler
+                String js =
+                        "$('#" + uuid + "').bind('jqplotClick', function(ev, gridpos, datapos, neighbor) {"
+                        + clickJS
+                        + "});";
+                runScript(js);
+
+                // Bound click JS
+                clickJSBound = true;
+            }
         }
     }
 
     public void setDataClickJS(String dataClickJS) {
         this.dataClickJS = dataClickJS;
-        if (dataClickJS != null) {
+        if (!dataClickJSBound) {
+            if (dataClickJS != null) {
 
-            // Replace the token by the uidlId
-            dataClickJS = dataClickJS.replaceAll("#id#", uuid);
+                // Replace the token by the uidlId
+                dataClickJS = dataClickJS.replaceAll("#id#", uuid);
 
-            // Define click handler
-            String js =
-                    "$('#" + uuid + "').bind('jqplotDataClick', function(ev, seriesIndex, pointIndex, data) {"
-                    + dataClickJS
-                    + "});";
-            runScript(js);
+                // Define click handler
+                String js =
+                        "$('#" + uuid + "').bind('jqplotDataClick', function(ev, seriesIndex, pointIndex, data) {"
+                        + dataClickJS
+                        + "});";
+                runScript(js);
+
+                // Bound data click JS
+                dataClickJSBound = true;
+            }
         }
     }
 
     @Override
     public void onAttach() {
         super.onAttach();
-    }
-
-    public void update() {
-
-        VConsole.log("GwtJQChart.update()");
-        // Set the dimensions
-        setDimensions(frameWidth, frameHeight);
-
-        if (refreshJS != null) {
-            runScript(refreshJS);
-        }
     }
 
     /**
