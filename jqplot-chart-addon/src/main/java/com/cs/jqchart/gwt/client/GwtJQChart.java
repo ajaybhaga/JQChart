@@ -210,7 +210,7 @@ public class GwtJQChart extends Widget implements
      var chart = $wnd.vaadin.chart;
 
      chart['sendData_' + id] = function(url) {
-     app.@com.cs.gwt.client.GwtJQChart::sendData(Ljava/lang/String;)(url);
+     app.@com.cs.jqchart.gwt.client.GwtJQChart::sendData(Ljava/lang/String;)(url);
      };
 
      $wnd.vaadin.chart = chart;
