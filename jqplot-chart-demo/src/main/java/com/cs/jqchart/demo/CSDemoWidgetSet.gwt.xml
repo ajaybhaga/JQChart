@@ -3,4 +3,5 @@
 <module>
     
     <inherits name="com.cs.gwt.CSWidgetSet" />
+    <inherits name="com.github.wolfie.refresher.RefresherWidgetset" />
 </module>
