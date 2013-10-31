@@ -1,6 +1,6 @@
 package com.cs.jqchart.demo;
 
-import com.cs.Chart;
+import com.cs.jqchart.Chart;
 import com.vaadin.annotations.Theme;
 import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.Property.ValueChangeListener;
