@@ -9,7 +9,7 @@ import com.vaadin.ui.AbstractComponent;
  * JQChart widget.
  */
 @JavaScript({"gwt/public/js/jquery.min.js", "gwt/public/js/date.format.js", "gwt/public/js/jquery.jqplot.js", "gwt/public/js/plugins/jqplot.dateAxisRenderer.js", "gwt/public/js/plugins/jqplot.canvasTextRenderer.min.js", "gwt/public/js/plugins/jqplot.canvasAxisLabelRenderer.min.js",
-    "gwt/public/js/plugins/jqplot.canvasAxisTickRenderer.js", "gwt/public/js/plugins/jqplot.barRenderer.js", "gwt/public/js/plugins/jqplot.categoryAxisRenderer.js", "gwt/public/js/plugins/jqplot.ohlcRenderer.min.js", "gwt/public/js/plugins/jqplot.enhancedLegendRenderer.min.js", "gwt/public/js/plugins/jqplot.highlighter.js", "gwt/public/js/plugins/jqplot.cursor.min.js"})
+    "gwt/public/js/plugins/jqplot.canvasAxisTickRenderer.js", "gwt/public/js/plugins/jqplot.barRenderer.js", "gwt/public/js/plugins/jqplot.categoryAxisRenderer.js", "gwt/public/js/plugins/jqplot.ohlcRenderer.min.js", "gwt/public/js/plugins/jqplot.enhancedLegendRenderer.min.js", "gwt/public/js/plugins/jqplot.meterGaugeRenderer.min.js", "gwt/public/js/plugins/jqplot.highlighter.js", "gwt/public/js/plugins/jqplot.cursor.min.js"})
 @SuppressWarnings("serial")
 public abstract class Chart extends AbstractComponent {
 
