@@ -1,1 +1,0 @@
-$wnd.com_cs_jqchart_demo_CSDemoWidgetSet.runAsyncCallback1('function $load_2(){\n}\n\ndefineSeed(2496, 1, makeCastMap([Q$RunAsyncCallback]));\n_.onSuccess_1 = function onSuccess_2(){\n  $load_2();\n  $setLoaded_0(get_12(), $getName_1(this.this$1));\n}\n;\n$entry(onLoad_0)(1);\n\n//@ sourceURL=1.js\n')

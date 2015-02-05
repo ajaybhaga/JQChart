@@ -1,2 +1,0 @@
-# Module com.cs.CSWidgetSet
-# RPC service class, partial path of RPC policy file
